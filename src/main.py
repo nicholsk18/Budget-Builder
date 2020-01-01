@@ -1,40 +1,12 @@
-import PyPDF2
 import re
-import os
+from utils import read_pdf_file
+from utils import pdf_to_text_file
 
-
-def readPdfFile(pdfFile, page):
-    pdfFileObj = open(pdfFile, 'rb')
-    pdfReader = PyPDF2.PdfFileReader(pdfFileObj, strict=False)
-    content = pdfReader.getPage(page).extractText()
-    content = content.replace('\n', ' -- ')
-
-    return content
-
-
-def pdfToTextFile(content):
-    if os.stat("newTextFile.txt").st_size != 0:
-        print("already converted")
-    else:
-        # create new file that contains pdf string
-        textFile = open('newTextFile.txt', 'a')
-        textFile.writelines(str(content.encode('ascii', 'ignore')))
-        textFile.close()
-
-        # Format str to break up each " -- "in to new line
-        textFile = open('newTextFile.txt', 'r')
-        strFile = textFile.readlines()
-        formatStr = str(strFile).replace(' -- ', '\n')
-        textFile.close()
-
-        # over write the old file with new formated string
-        textFile = open('newTextFile.txt', 'w')
-        textFile.writelines(formatStr)
-        textFile.close()
-
-
-pdfFile = readPdfFile('statement.pdf', 2)
-pdfToTextFile(pdfFile)
+# Converts pdf file in to a string
+pdfFile = read_pdf_file.read_pdf_file('statement.pdf', 2)
+# If text file doesnt exist creates a new file
+# Parses the pdf string and converts it in to list(array) of words
+pdf_to_text_file.pdf_to_text_file(pdfFile)
 
 convertedTextFile = open('newTextFile.txt', 'r')
 fileLines = convertedTextFile.readlines()
@@ -75,5 +47,5 @@ for i in range(0, len(listOfObj), 3):
     else:
         totalOfAmounts[listOfObj[i+1]] = newNum
 
-# for x in totalOfAmounts.values():
-print(totalOfAmounts)
+for i, j in totalOfAmounts.items():
+    print(i, j)
