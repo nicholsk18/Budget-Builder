@@ -1,6 +1,8 @@
 import re
 from utils import read_pdf_file
 from utils import pdf_to_text_file
+from utils import list_of_obj
+from utils import list_to_dict
 
 # Converts pdf file in to a string
 pdfFile = read_pdf_file.read_pdf_file('statement.pdf', 2)
@@ -9,43 +11,23 @@ pdfFile = read_pdf_file.read_pdf_file('statement.pdf', 2)
 pdf_to_text_file.pdf_to_text_file(pdfFile)
 
 convertedTextFile = open('newTextFile.txt', 'r')
-fileLines = convertedTextFile.readlines()
-# print(fileLines)
-textFileLength = len(fileLines)
+# reads the string out of the new file
+strFile = convertedTextFile.readlines()
+# length of the string in the file
+textFileLength = len(strFile)
 
+# regex to match date format
 purchaseDateRegex = re.compile(r'([A-Z][a-z][a-z] \d+)')
+
+# find the first date in the file
 foundDate = purchaseDateRegex.findall(str(pdfFile))
 
+# takes in a string and converts it to arr of words
+listOfObj = list_of_obj.list_of_obj(strFile, foundDate, textFileLength)
 
-# creating/adding places and total amount spend
-totalOfAmounts = {}
+# takes in a list(array) and returns a dict(obj)
+totalOfAmounts = list_to_dict.list_to_dict(listOfObj)
 
-listOfObj = []
-
-for i in range(0, textFileLength):
-    for j in range(0, len(foundDate)):
-        if fileLines[i].rstrip() == foundDate[j]:
-            listOfObj.append(fileLines[i].rstrip())
-            if fileLines[i+2].rstrip().startswith('$'):
-                listOfObj.append((fileLines[i+1].rstrip()))
-                listOfObj.append(fileLines[i+2].rstrip())
-            else:
-                listOfObj.append(fileLines[i+1].rstrip() + " " + fileLines[i+2].rstrip())
-                listOfObj.append(fileLines[i+3].rstrip())
-            break
-
-for i in range(0, len(listOfObj), 3):
-    newStr = ''
-    if '- $' in listOfObj[i+2]:
-        newNum = float(listOfObj[i+2].replace('- $', ''))
-        newNum = -newNum
-    else:
-        newNum = float(listOfObj[i+2].replace("$", ""))
-    # print(newStr)
-    if listOfObj[i+1] in totalOfAmounts:
-        totalOfAmounts[listOfObj[i+1]] += newNum
-    else:
-        totalOfAmounts[listOfObj[i+1]] = newNum
-
+# show key: value pairs
 for i, j in totalOfAmounts.items():
     print(i, j)

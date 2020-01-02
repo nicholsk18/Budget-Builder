@@ -1,3 +1,9 @@
+# This function creates a new file
+# Checks to see if file already has content
+# if not writes to file then
+# reads file and changes " -- " with "\n" for the outcome look of .txt file
+# writes new formated string back to the file overriding old file
+
 import os
 import sys
 sys.path.append("./utils/")
