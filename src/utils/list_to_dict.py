@@ -3,6 +3,7 @@
 # if the key already exist in dict add the new value to old
 # if it does not creates a new key: value pair
 
+
 def list_to_dict(listOfObj):
     # creating/adding places and total amount spend
     totalOfAmounts = {}
