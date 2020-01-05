@@ -6,9 +6,11 @@ import os
 class MainWindow(wx.Frame):
     """We simply derive a new class of a frame"""
     def __init__(self, parent, title):
-        wx.Frame.__init__(self, parent, title=title, size=(500, 500))
+        self.dirname = ''
+
+        wx.Frame.__init__(self, parent, title=title, size=(200, -1))
         self.control = wx.TextCtrl(self, style=wx.TE_MULTILINE)
-        self.CreateStatusBar() # A status bar in the bottom of the window
+        self.CreateStatusBar()  # A status bar in the bottom of the window
 
         # setting up the menu
         filemenu = wx.Menu()
@@ -24,11 +26,26 @@ class MainWindow(wx.Frame):
         self.SetMenuBar(menuBar)
 
         # Set events
+        self.Bind(wx.EVT_MENU, self.OnOpen, menuOpen)
         self.Bind(wx.EVT_MENU, self.OnAbout, menuAbout)
         self.Bind(wx.EVT_MENU, self.OnExit, menuExit)
-        self.Bind(wx.EVT_MENU, self.OnOpen, menuOpen)
 
-        self.Show(True)
+        self.sizer2 = wx.BoxSizer(wx.HORIZONTAL)
+        self.buttons = []
+        for i in range(0, 6):
+            self.buttons.append(wx.Button(self, -1, "Button &" + str(i)))
+            self.sizer2.Add(self.buttons[i], 1, wx.EXPAND)
+
+        # Use some sizers to see layout options
+        self.sizer = wx.BoxSizer(wx.VERTICAL)
+        self.sizer.Add(self.control, 1, wx.EXPAND)
+        self.sizer.Add(self.sizer2, 1, wx.EXPAND)
+
+        # Layout sizers
+        self.SetSizer(self.sizer)
+        self.SetAutoLayout(1)
+        self.sizer.Fit(self)
+        self.Show()
 
     # This is where opeing pdf file will go
     def OnOpen(self, e):
