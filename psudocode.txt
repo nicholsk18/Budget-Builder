@@ -1,0 +1,16 @@
+# Budget builder is a finance managing application
+# It takes a pdf file and converts it to json format
+# the keys are the things that were bought
+# values are the amount paid for
+# 
+# The goal of the application is to combine alike purchases
+# The display shows total amount spend at each location
+#
+# The second stage fetures
+# Have total amount spend displayed
+# Have total amount earned displayed
+#
+# The third stage fetures
+# Have algorithm that highlights all areas that are unnessiry purchases in red
+#
+# application might need to be broken up in to debit and credit types
